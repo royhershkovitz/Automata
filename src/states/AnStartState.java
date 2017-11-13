@@ -1,11 +1,20 @@
+package states;
+import java.util.LinkedList;
 
 public class AnStartState extends AnState{
 
 	private static boolean _isIntialize = false;
-	public AnStartState(String name, AnState[] nextStates) {
+	public AnStartState(String name, LinkedList<AnState>[] nextStates) {
 		super(name, nextStates);
 		if(_isIntialize)
-			throw new ExceptionInInitializerError("Can initialize two StarState");
+			throw new ExceptionInInitializerError("Can't initialize two StarState");
+		_isIntialize = true;
+	}
+	
+	public AnStartState(String name) {
+		super(name);
+		if(_isIntialize)
+			throw new ExceptionInInitializerError("Can't initialize two StarState");
 		_isIntialize = true;
 	}
 	
@@ -25,5 +34,12 @@ public class AnStartState extends AnState{
 	
 	public void delete(){
 		_isIntialize = false;
+	}
+	
+	//regularExpressionToNfa
+	public boolean areWeTheSame(AnStartState start)
+	{
+		
+		return false;
 	}
 }

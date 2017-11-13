@@ -1,17 +1,25 @@
+package states;
+import java.awt.List;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class AnState 
 {
 	private String _name;
 	public static char[] _alefBeit;
-	protected AnState[] _nextStates;//the size is the aleph-beit size
+	protected LinkedList<AnState>[] _nextStates;//the size is the aleph-beit size
 	//constructor
+	@SuppressWarnings("unchecked")
 	public AnState(String name)
 	{
 		_name = name;
-		_nextStates = new AnState[_alefBeit.length];
+		_nextStates = (LinkedList<AnState>[]) new LinkedList[_alefBeit.length];
+		for(int i = 0; i < _alefBeit.length; i++)
+			_nextStates[i] = new LinkedList<AnState>();
+		
 	}
 	//constructor
-	public AnState(String name, AnState[] nextStates)
+	public AnState(String name, LinkedList<AnState>[] nextStates)
 	{
 		_name = name;
 		_nextStates = nextStates;
@@ -22,9 +30,9 @@ public class AnState
 		boolean foundChar = false;
 		for(int j = 0; j < _alefBeit.length&!foundChar; j++)
 			if(_alefBeit[j] == (int)nextCh){
-				_nextStates[j] = nextSt;
+				_nextStates[j].add(nextSt);
 				foundChar = true;
-			}		
+			}
 	}
 	
 	//The function delete the route of the automat 
@@ -61,14 +69,28 @@ public class AnState
 	//The function get a word and return true if the automata include this word
 	protected boolean compute(String word) {		
 		boolean foundCh = false;
-		int nextStateIndex = 0;
-		for(; nextStateIndex < _alefBeit.length&!foundCh; nextStateIndex++)
-			if(_alefBeit[nextStateIndex] == (int)word.charAt(0))
-				foundCh = true;//we validate before that it always will be true during this for loop
-		if(_nextStates[nextStateIndex] == null)
-			foundCh = false;
-		else
-			foundCh = _nextStates[nextStateIndex].compute(word.substring(1));
+		//System.out.println(_name + ", word: " + word);
+		if(word.length() != 0){
+			int nextStateIndex = 0;
+			//check the input current char
+			while(nextStateIndex < _alefBeit.length & !foundCh){
+				if(_alefBeit[nextStateIndex] == (int)word.charAt(0))
+					foundCh = true;//we validate before that it always will be true during this for loop
+				else
+					nextStateIndex = nextStateIndex + 1;
+			}
+			if(foundCh){
+				foundCh = false;
+				if(_nextStates[nextStateIndex].size() != 0){
+					word = word.substring(1);
+					Iterator<AnState> iter = _nextStates[nextStateIndex].iterator();
+					while(iter.hasNext() & !foundCh){
+						//System.out.print(_name + " -> ");
+						foundCh = iter.next().compute(word);
+					}
+				}
+			}
+		}
 		return foundCh;
 	}
 	
@@ -78,8 +100,23 @@ public class AnState
 	{
 		String output = _name+", [";
 		for(int i = 0; i < _nextStates.length; i++)
-			output = output + "  " + _alefBeit[i] +"->" + _nextStates[i].getName();
+			for(AnState state : _nextStates[i])
+				output = output + "  " + _alefBeit[i] +"->" + state.getName();
 		return output +"  ]";
+	}
+	
+	//regularExpressionToNfa
+	public static AnState regularExpressionToNfa(String regular)
+	{
+		
+		return new AnState("NFA");
+	}
+	
+	//nfaToDfa
+	public static AnState nfaToDfa(String regular)
+	{
+		
+		return new AnState("DFA");
 	}
 	
 }
