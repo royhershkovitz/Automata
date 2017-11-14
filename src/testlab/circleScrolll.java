@@ -20,63 +20,74 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
+import javax.swing.SwingConstants;
 
 
-public class ScrollScrap extends JFrame implements KeyListener, MouseListener, MouseWheelListener, MouseMotionListener{
+public class circleScrolll extends JFrame implements KeyListener, MouseListener, MouseWheelListener, MouseMotionListener{
 	public static void main(String[] args) {
-		new ScrollScrap();
+		new circleScrolll();
 	}
 	
 
-	int _xView = 0;
-	int _yView = 0;
+	int _xEventView = 0;
+	int _yEventView = 0;
+	int _xcurrView = 0;
+	int _ycurrView = 0;
 	int _xDiff = 20;
 	int _yDiff = 20;
 	int zoom = 0;
-	JPanel _panel;
-	JLabel[] scrollables;
+	JLayeredPane _panel;
+	JLabel[] scrollablesPics;
+	JLabel[] scrollablesTexts;
+	int[] locationsX;
+	int[] locationsY;
 	Image projImg = null;
 	
-	ScrollScrap(){
-		super("Scroll Scrap");
+	circleScrolll(){
+		super("circle Scrolll");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		_panel = new JPanel(null);
+		_panel = new JLayeredPane();
 		//Settings of frame	
 		add(_panel);		
 		try{			
-			projImg = ImageIO.read((InputStream) this.getClass().getResourceAsStream("/testlab/cry.PNG"));
+			projImg = ImageIO.read((InputStream) this.getClass().getResourceAsStream("/testlab/circle.png"));
 			setIconImage(projImg);
 		}
 		catch(Throwable ex){
 			//System.out.println("/Ass4-Media/creeps/mike-2.png");
-			System.out.println("missing /testlab/cry.PNG");
+			System.out.println("missing /testlab/circle.png");
 		}
 		setSize(1000, 1000);
 		setResizable(false);
 		setVisible(true);		
-		scrollables = new JLabel[5];
+		scrollablesPics = new JLabel[5];
+		scrollablesTexts = new JLabel[5];
+		locationsX = new int[5];
+		locationsY = new int[5];
 		
 		//pics
 		try {
-			for(int i = 0; i < scrollables.length; i++){
-				scrollables[i] = new JLabel(new ImageIcon(projImg));
-				_panel.add(scrollables[i]);
-				Dimension size = scrollables[i].getPreferredSize();
-				scrollables[i].setBounds((int) (819*Math.random()), (int) (821*Math.random()), size.width, size.height);
+			for(int i = 0; i < scrollablesPics.length; i++){
+				//pic
+				scrollablesPics[i] = new JLabel(new ImageIcon(projImg));
+				Dimension size = scrollablesPics[i].getPreferredSize();
+				locationsX[i] = (int) (819*Math.random());
+				locationsY[i] = (int) (821*Math.random());
+				scrollablesPics[i].setBounds(locationsX[i], locationsY[i], size.width, size.height);
+				_panel.add(scrollablesPics[i],  new Integer(1));
 				//System.out.println(scrollables[i].getX() + ", " + scrollables[i].getY() + ", " + size.width + ", " + size.height);
+				//text
+				scrollablesTexts[i] = new JLabel(""+i+1, SwingConstants.CENTER);
+				scrollablesTexts[i].setFont(new Font("David", Font.PLAIN, 24));
+				//text.setForeground(Color.red);
+				scrollablesTexts[i].setBounds(locationsX[i], locationsY[i], size.width, size.height);
+				_panel.add(scrollablesTexts[i], new Integer(2));
+				
 			}
 		} catch (Throwable e) {
 			_panel.add(new JLabel("<html>DataBase is corrupted<br>here have a beautiful chars art instead<br>" + bonus() +"</html>"));
 		}
-		
-		//text
-		JLabel text = new JLabel("Hello");
-		text.setFont(new Font("David", Font.PLAIN, 24));
-		text.setForeground(Color.red);
-		Dimension size = text.getPreferredSize();				
-		text.setBounds((int) (50 + 800*Math.random()), (int) (50 + 800*Math.random()), size.width, size.height);
-		_panel.add(text);
 		
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -152,22 +163,30 @@ public class ScrollScrap extends JFrame implements KeyListener, MouseListener, M
 	}
 	
 	private void down(){
-		for(JLabel scrollable : scrollables)
-			scrollable.setBounds(scrollable.getX(), scrollable.getY() - _yDiff, scrollable.getWidth(), scrollable.getHeight());					
+		for(JLabel scrollable : scrollablesPics)
+			scrollable.setBounds(scrollable.getX(), scrollable.getY() - _yDiff, scrollable.getWidth(), scrollable.getHeight());
+		for(JLabel scrollable : scrollablesTexts)
+			scrollable.setBounds(scrollable.getX(), scrollable.getY() - _yDiff, scrollable.getWidth(), scrollable.getHeight());
 	}
 	
 	private void up(){
-		for(JLabel scrollable : scrollables)
-			scrollable.setBounds(scrollable.getX(), scrollable.getY() + _yDiff, scrollable.getWidth(), scrollable.getHeight());		
+		for(JLabel scrollable : scrollablesPics)
+			scrollable.setBounds(scrollable.getX(), scrollable.getY() + _yDiff, scrollable.getWidth(), scrollable.getHeight());
+		for(JLabel scrollable : scrollablesTexts)
+			scrollable.setBounds(scrollable.getX(), scrollable.getY() + _yDiff, scrollable.getWidth(), scrollable.getHeight());
 	}
 	
 	private void right(){
-		for(JLabel scrollable : scrollables)
+		for(JLabel scrollable : scrollablesPics)
+			scrollable.setBounds(scrollable.getX() - _xDiff, scrollable.getY(), scrollable.getWidth(), scrollable.getHeight());
+		for(JLabel scrollable : scrollablesTexts)
 			scrollable.setBounds(scrollable.getX() - _xDiff, scrollable.getY(), scrollable.getWidth(), scrollable.getHeight());
 	}
 	
 	private void left(){
-		for(JLabel scrollable : scrollables)
+		for(JLabel scrollable : scrollablesPics)
+			scrollable.setBounds(scrollable.getX() + _xDiff, scrollable.getY(), scrollable.getWidth(), scrollable.getHeight());
+		for(JLabel scrollable : scrollablesTexts)
 			scrollable.setBounds(scrollable.getX() + _xDiff, scrollable.getY(), scrollable.getWidth(), scrollable.getHeight());
 	}
 
@@ -198,19 +217,33 @@ public class ScrollScrap extends JFrame implements KeyListener, MouseListener, M
 			int x = arg0.getX();
 			int y = arg0.getY();
 			if(zoom == 0){
-				for(JLabel labl : scrollables){
+				int i = 0;
+				for(JLabel labl : scrollablesPics){
 					labl.setIcon(new ImageIcon(projImg));// reorder all x,y by map location settings
-					labl.setBounds((int) (x + increaseFactor*(labl.getX() - x)), (int) (y + increaseFactor*(labl.getY() - y)), labl.getWidth(), labl.getHeight());
+					labl.setBounds(locationsX[i] + _xcurrView, locationsY[i] + _ycurrView, 100, 100);
+					i++;
+				}
+				i = 0;
+				for(JLabel labl : scrollablesTexts){
+					labl.setBounds(locationsX[i] + _xcurrView, locationsY[i] + _ycurrView, 100, 100);
+					i++;
 				}
 			}
-			else
-				for(JLabel labl : scrollables){
+			else{
+				for(JLabel labl : scrollablesPics){
 					Image img = ((ImageIcon) labl.getIcon()).getImage();
 					int width = (int) (img.getWidth(this)*increaseFactor);
 					int heigth = (int) (img.getHeight(this)*increaseFactor);
 	
 					labl.setBounds((int) (x + increaseFactor*(labl.getX() - x)), (int) (y + increaseFactor*(labl.getY() - y)), width, heigth);
 					labl.setIcon(new ImageIcon(getScaledImage(img, width, heigth)));
+				}
+				for(JLabel labl : scrollablesTexts){
+					int width = (int) (labl.getWidth()*increaseFactor);
+					int heigth = (int) (labl.getHeight()*increaseFactor);
+	
+					labl.setBounds((int) (x + increaseFactor*(labl.getX() - x)), (int) (y + increaseFactor*(labl.getY() - y)), width, heigth);					
+				}
 			}
 		}
 	}
@@ -236,8 +269,8 @@ public class ScrollScrap extends JFrame implements KeyListener, MouseListener, M
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		//System.out.println("4: " +arg0.getX() +" "+ arg0.getY());
-		_xView = arg0.getX();
-		_yView = arg0.getY();				
+		_xEventView = arg0.getX();
+		_yEventView = arg0.getY();				
 	}
 
 	@Override
@@ -252,10 +285,14 @@ public class ScrollScrap extends JFrame implements KeyListener, MouseListener, M
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		//System.out.println("drag: " +e.getX() +" "+ e.getY());
-		for(JLabel scrollable : scrollables)
-			scrollable.setBounds(scrollable.getX() + e.getX() - _xView, scrollable.getY() + e.getY() - _yView, scrollable.getWidth(), scrollable.getHeight());	
-		_xView = e.getX();
-		_yView = e.getY();
+		for(JLabel scrollableP : scrollablesPics)
+			scrollableP.setBounds(scrollableP.getX() + e.getX() - _xEventView, scrollableP.getY() + e.getY() - _yEventView, scrollableP.getWidth(), scrollableP.getHeight());
+		for(JLabel scrollableT : scrollablesTexts)
+			scrollableT.setBounds(scrollableT.getX() + e.getX() - _xEventView, scrollableT.getY() + e.getY() - _yEventView, scrollableT.getWidth(), scrollableT.getHeight());
+		_xcurrView = _xcurrView + e.getX() - _xEventView;
+		_ycurrView = _ycurrView + e.getY() - _yEventView;
+		_xEventView = e.getX();
+		_yEventView = e.getY();
 	}
 
 	@Override
