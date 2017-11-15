@@ -45,12 +45,12 @@ public class ScrollScrap extends JFrame implements KeyListener, MouseListener, M
 		//Settings of frame	
 		add(_panel);		
 		try{			
-			projImg = ImageIO.read((InputStream) this.getClass().getResourceAsStream("/testlab/cry.PNG"));
+			projImg = ImageIO.read((InputStream) this.getClass().getResourceAsStream("/Media/cry.png"));
 			setIconImage(projImg);
 		}
 		catch(Throwable ex){
 			//System.out.println("/Ass4-Media/creeps/mike-2.png");
-			System.out.println("missing /testlab/cry.PNG");
+			System.out.println("missing /Media/cry.PNG");
 		}
 		setSize(1000, 1000);
 		setResizable(false);
@@ -186,11 +186,11 @@ public class ScrollScrap extends JFrame implements KeyListener, MouseListener, M
 		//System.out.println(arg0.getWheelRotation());
 		double increaseFactor = 0;
 		if(arg0.getWheelRotation() < 0 & zoom >= -6){
-			increaseFactor = 0.9;
+			increaseFactor = 1.1;
 			zoom--;
 		}
 		else if (zoom <= 6){
-			increaseFactor = 1.1;
+			increaseFactor = 0.9;
 			zoom++;
 		}
 		
