@@ -45,7 +45,7 @@ public class ScrollScrap extends JFrame implements KeyListener, MouseListener, M
 		//Settings of frame	
 		add(_panel);		
 		try{			
-			projImg = ImageIO.read((InputStream) this.getClass().getResourceAsStream("/Media/cry.png"));
+			projImg = ImageIO.read(this.getClass().getResourceAsStream("/Media/cry.png"));
 			setIconImage(projImg);
 		}
 		catch(Throwable ex){

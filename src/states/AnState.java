@@ -13,7 +13,7 @@ public class AnState
 	public AnState(String name)
 	{
 		_name = name;
-		_nextStates = (LinkedList<AnState>[]) new LinkedList[_alefBeit.length];
+		_nextStates = new LinkedList[_alefBeit.length];
 		for(int i = 0; i < _alefBeit.length; i++)
 			_nextStates[i] = new LinkedList<AnState>();
 		
@@ -29,7 +29,7 @@ public class AnState
 	public void addRoute(char nextCh, AnState nextSt) {		
 		boolean foundChar = false;
 		for(int j = 0; j < _alefBeit.length&!foundChar; j++)
-			if(_alefBeit[j] == (int)nextCh){
+			if(_alefBeit[j] == nextCh){
 				_nextStates[j].add(nextSt);
 				foundChar = true;
 			}
@@ -39,7 +39,7 @@ public class AnState
 		public boolean delRoute(char nextCh) {		
 			boolean foundChar = false;
 			for(int j = 0; j < _alefBeit.length&!foundChar; j++)
-				if(_alefBeit[j] == (int)nextCh){
+				if(_alefBeit[j] == nextCh){
 					_nextStates[j] = null;
 					foundChar = true;
 				}
@@ -57,7 +57,7 @@ public class AnState
 	protected static String reduceSt(String st) {
 		String reducedAlefBeit = "";
 		for(int index = 0; index < st.length(); index++)
-			if(st.charAt(index) != (int)' ' & st.charAt(index) != (int)',')
+			if(st.charAt(index) != ' ' & st.charAt(index) != ',')
 				reducedAlefBeit = reducedAlefBeit + st.charAt(index);
 		return reducedAlefBeit;
 	}
@@ -74,7 +74,7 @@ public class AnState
 			int nextStateIndex = 0;
 			//check the input current char
 			while(nextStateIndex < _alefBeit.length & !foundCh){
-				if(_alefBeit[nextStateIndex] == (int)word.charAt(0))
+				if(_alefBeit[nextStateIndex] == word.charAt(0))
 					foundCh = true;//we validate before that it always will be true during this for loop
 				else
 					nextStateIndex = nextStateIndex + 1;

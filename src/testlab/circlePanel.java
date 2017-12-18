@@ -74,8 +74,8 @@ public class circlePanel extends JLayeredPane implements MouseMotionListener, Mo
 	
 	//reload the original settings
 	public void refresh() {		
-		int width = (int) (_circle.getWidth(this));
-		int heigth = (int) (_circle.getHeight(this));
+		int width = (_circle.getWidth(this));
+		int heigth = (_circle.getHeight(this));
 		_pic.setBounds(0, 0, width, heigth);
 		_pic.setIcon(new ImageIcon(_circle));
 		_text.setBounds(0, 0, width, heigth);

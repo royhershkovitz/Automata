@@ -51,7 +51,7 @@ public class circleScrolll extends JFrame implements KeyListener, MouseListener,
 		//Settings of frame	
 		add(_panel);		
 		try{			
-			projImg = ImageIO.read((InputStream) this.getClass().getResourceAsStream("/Media/circle.png"));
+			projImg = ImageIO.read(this.getClass().getResourceAsStream("/Media/circle.png"));
 			setIconImage(projImg);
 		}
 		catch(Throwable ex){

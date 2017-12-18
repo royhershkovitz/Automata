@@ -13,7 +13,7 @@ public class InitImages {
 	public static Image init(String name){
 		Image tImage = null;
 		try {
-			tImage = ImageIO.read((InputStream) ScrollScrap.class.getResourceAsStream("/Media/"+name+".png"));
+			tImage = ImageIO.read(ScrollScrap.class.getResourceAsStream("/Media/"+name+".png"));
 		} 
 		catch (Throwable e) {
 			System.out.println("Missing /Media/"+name+".png Picture");

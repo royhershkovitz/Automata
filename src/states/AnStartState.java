@@ -26,7 +26,7 @@ public class AnStartState extends AnState{
 		{
 			output = false;
 			for(int j = 0; j < _alefBeit.length&!output; j++)
-				if(_alefBeit[j] == (int)reducedAlefBeit.charAt(j))
+				if(_alefBeit[j] == reducedAlefBeit.charAt(j))
 					output = true;
 		}
 		return output&&super.compute(word);
